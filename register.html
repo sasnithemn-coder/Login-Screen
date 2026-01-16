@@ -117,7 +117,7 @@
                 alert("Passwords do not match!");
                 return;
             }
-            if(user){
+            if(localStorage.getItem(email)){
                 alert("User already exists!");
                 return;
             }
