@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
+
     <style>
         * {
             box-sizing: border-box;
@@ -19,7 +20,7 @@
             align-items: center;
         }
 
-        #LoginForm {
+        #RegisterForm {
             background: #ffffff;
             width: 380px;
             padding: 30px 35px;
@@ -27,22 +28,23 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
 
-        #LoginForm h2 {
+        #RegisterForm h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #1f2937;
         }
 
-        #LoginForm::before {
-            content: "Enter your credentials to access your account";
+        #RegisterForm:before {
+            content: "Internal Employees Only. \ASet up your account using your employee credentials.";
             display: block;
             text-align: center;
             font-size: 14px;
             color: #6b7280;
             margin-bottom: 20px;
+            white-space:pre-line;
         }
 
-        #LoginForm input {
+        #RegisterForm input {
             width: 100%;
             padding: 12px 14px;
             margin-bottom: 15px;
@@ -53,11 +55,11 @@
             transition: border-color 0.3s;
         }
 
-        #LoginForm input:focus {
+        #RegisterForm input:focus {
             border-color: #6366f1;
         }
 
-        #LoginForm button {
+        #RegisterForm button {
             width: 100%;
             padding: 12px;
             background-color: #6366f1;
@@ -70,11 +72,11 @@
             transition: background-color 0.3s;
         }
 
-        #LoginForm button:hover {
+        #RegisterForm button:hover {
             background-color: #4f46e5;
         }
 
-        #LoginForm p {
+        #RegisterForm  {
             display: block;
             text-align: center;
             margin-top: 15px;
@@ -83,43 +85,46 @@
             text-decoration: none;
         }
 
-        #LoginForm a:hover {
+        #RegisterForm a:hover {
             text-decoration: underline;
         }
-
     </style>
+
 </head>
 <body>
-    <form id="LoginForm">
-        <h2>Login</h2>
+    <form id="RegisterForm">
+        <h2>Employee Registration</h2>
+        <input type="text" id="Username" placeholder="Enter your Name" required><br>
         <input type="email" id="Email" placeholder="Enter your Company Email" required><br>
+        <input type="text" id="EmployeeID" placeholder="Enter Employee ID (optional)"><br>
         <input type="password" id="Password" placeholder="Enter Password" required><br>
-        <button type="submit">Login</button>
-        &nbsp; <p>First time user? Click <a href="register.html">Here</a></p>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required><br>
+        <button type="submit">Register</button>
+        &nbsp; <p>Already have an account? Click <a href="login.html">Here</a></p>
     </form>
 
     <script>
-        document.getElementById("LoginForm").addEventListener("submit", function(event){
+        document.getElementById("RegisterForm").addEventListener("submit", function(event){
             event.preventDefault();
+            var username = document.getElementById("Username").value;
             var email = document.getElementById("Email").value;
             var password = document.getElementById("Password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
 
-            var user = localStorage.getItem(email);
+            var user = localStorage.getItem(username);
 
+            if(password !==confirmPassword){
+                alert("Passwords do not match!");
+                return;
+            }
             if(user){
-                var parsedUser = JSON.parse(user);
-                if(parsedUser && parsedUser.password === password){
-                    localStorage.setItem("user", JSON.stringify(parsedUser));
-                    window.location.href = "index.html";
-                } else {
-                    alert("Incorrect password!");
-                    return;
-                }
-
-            } else {
-                alert("User does not exist!");
+                alert("User already exists!");
+                return;
             }
 
+            localStorage.setItem(email, JSON.stringify({username: username, email: email, password: password}));
+            alert("Registration successful! Please log in.");
+            window.location.href = "login.html";
         });
     </script>
 </body>
